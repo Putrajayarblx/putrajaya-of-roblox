@@ -55,23 +55,3 @@ window.addEventListener(
   },
   { passive: true }
 );
-
-});
-
-document.querySelectorAll('.nav-links a').forEach((link) => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('open');
-    menuButton?.setAttribute('aria-expanded', 'false');
-    if (menuButton) menuButton.textContent = '☰';
-  });
-});
-
-const header = document.querySelector('.site-header');
-window.addEventListener(
-  'scroll',
-  () => {
-    header.style.borderBottomColor =
-      window.scrollY > 10 ? 'var(--line)' : 'transparent';
-  },
-  { passive: true }
-);
