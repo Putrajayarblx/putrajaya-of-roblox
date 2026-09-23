@@ -1,5 +1,35 @@
 const menuButton = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.nav-links');
+const themeButton = document.querySelector('.theme-toggle');
+
+const savedTheme = localStorage.getItem('putrajaya-theme');
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+}
+
+function updateThemeButton() {
+  const dark = document.body.classList.contains('dark');
+  if (!themeButton) return;
+
+  const icon = themeButton.querySelector('.theme-icon');
+  const label = themeButton.querySelector('.theme-label');
+
+  icon.textContent = dark ? '☀' : '☾';
+  label.textContent = dark ? 'Light' : 'Dark';
+  themeButton.setAttribute(
+    'aria-label',
+    dark ? 'Switch to light mode' : 'Switch to dark mode'
+  );
+}
+
+updateThemeButton();
+
+themeButton?.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('putrajaya-theme', isDark ? 'dark' : 'light');
+  updateThemeButton();
+});
 
 menuButton?.addEventListener('click', () => {
   const open = nav.classList.toggle('open');
@@ -15,8 +45,12 @@ document.querySelectorAll('.nav-links a').forEach((link) => {
   });
 });
 
-// Add a subtle border to the sticky header after scrolling.
 const header = document.querySelector('.site-header');
-window.addEventListener('scroll', () => {
-  header.style.borderBottomColor = window.scrollY > 10 ? '#d8d5cc' : 'transparent';
-}, { passive: true });
+window.addEventListener(
+  'scroll',
+  () => {
+    header.style.borderBottomColor =
+      window.scrollY > 10 ? 'var(--line)' : 'transparent';
+  },
+  { passive: true }
+);
