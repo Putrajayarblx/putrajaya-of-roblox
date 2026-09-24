@@ -1,0 +1,39 @@
+backend:
+  name: github
+  repo: Putrajayarblx/putrajaya-of-roblox
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+media_folder: "assets/uploads"
+public_folder: "/putrajaya-of-roblox/assets/uploads"
+site_url: https://putrajayarblx.github.io/putrajaya-of-roblox/
+display_url: https://putrajayarblx.github.io/putrajaya-of-roblox/
+
+collections:
+  - name: blog
+    label: Blog posts
+    folder: content/blog
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: Title, name: title, widget: string}
+      - {label: Date, name: date, widget: datetime}
+      - {label: Category, name: category, widget: string}
+      - {label: Summary, name: summary, widget: text}
+      - {label: Cover image, name: image, widget: image, required: false}
+      - {label: Body, name: body, widget: markdown}
+  - name: wiki
+    label: Wiki articles
+    folder: content/wiki
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - {label: Title, name: title, widget: string}
+      - {label: Section, name: section, widget: string}
+      - {label: Summary, name: summary, widget: text}
+      - {label: Body, name: body, widget: markdown}
