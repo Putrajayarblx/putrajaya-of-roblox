@@ -14,8 +14,12 @@ content:
         type: string
         required: true
       - name: date
-        label: Date
+        label: Publish date
         type: date
+        required: true
+      - name: author
+        label: Author
+        type: string
         required: true
       - name: category
         label: Category
