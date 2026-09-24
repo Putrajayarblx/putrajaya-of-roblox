@@ -55,3 +55,69 @@ content:
       - name: body
         label: Body
         type: rich-text
+
+  - name: projects
+    label: Projects
+    type: collection
+    path: content/projects
+    filename: "{slug}.md"
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Release date
+        type: date
+        required: true
+      - name: image
+        label: Cover image
+        type: image
+      - name: video
+        label: Video URL or uploaded video path
+        type: string
+      - name: button_label
+        label: Button label
+        type: string
+        required: true
+      - name: button_url
+        label: Button link
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+
+  - name: rp-jobs
+    label: RP jobs
+    type: collection
+    path: content/rp-jobs
+    filename: "{slug}.md"
+    fields:
+      - name: title
+        label: Job title
+        type: string
+        required: true
+      - name: date
+        label: Release date
+        type: date
+        required: true
+      - name: image
+        label: Cover image
+        type: image
+      - name: video
+        label: Video URL or uploaded video path
+        type: string
+      - name: button_label
+        label: Button label
+        type: string
+        required: true
+      - name: button_url
+        label: Button link
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
