@@ -1,28 +1,246 @@
 const REPO = 'Putrajayarblx/putrajaya-of-roblox';
 const BRANCH = 'main';
-const API_BASE = `https://api.github.com/repos/${REPO}/contents/`;
-const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/`;
+const CONTENT_API = 'https://api.github.com/repos/Putrajayarblx/putrajaya-of-roblox/contents/';
 
-const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const formatDate = value => { if (!value) return 'Unpublished'; const date = new Date(value); return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat('en-MY', { day:'numeric', month:'short', year:'numeric' }).format(date); };
-const parseFrontmatter = markdown => { const match = String(markdown).match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/); if (!match) return { meta:{}, body:String(markdown).trim() }; const meta={}; match[1].split('\n').forEach(line=>{const item=line.match(/^([\w-]+):\s*(.*)$/);if(item)meta[item[1]]=item[2].trim().replace(/^['"]|['"]$/g,'')}); return {meta,body:match[2].trim()}; };
-const imageURL = value => { if (!value) return ''; if (/^https?:\/\//.test(value)) return value; return value.startsWith('/') ? value : `${RAW_BASE}${value}`; };
-const inlineMarkdown = value => escapeHTML(value).replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');
-const markdownToHTML = markdown => String(markdown||'').split(/\n\s*\n/).map(block=>{const text=block.trim();if(!text)return '';if(/^#{1,3}\s/.test(text)){const m=text.match(/^(#{1,3})\s+(.+)$/);return `<h${m[1].length}>${inlineMarkdown(m[2])}</h${m[1].length}>`;}if(text.startsWith('> '))return `<blockquote>${inlineMarkdown(text.slice(2))}</blockquote>`;if(/^[-*]\s/.test(text))return `<ul>${text.split('\n').map(item=>`<li>${inlineMarkdown(item.replace(/^[-*]\s/,''))}</li>`).join('')}</ul>`;return `<p>${inlineMarkdown(text).replace(/\n/g,'<br>')}</p>`;}).join('');
-const loadFolder = async folder => { const response=await fetch(`${API_BASE}${folder}?ref=${BRANCH}`,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'}); if(!response.ok)throw new Error(`Unable to load ${folder}`); const files=(await response.json()).filter(file=>file.type==='file'&&file.name.endsWith('.md')); return Promise.all(files.map(async file=>{const raw=await fetch(`${RAW_BASE}${file.path}`,{cache:'no-store'});if(!raw.ok)throw new Error(`Unable to load ${file.name}`);const parsed=parseFrontmatter(await raw.text());return {...parsed.meta,body:parsed.body,slug:file.name.replace(/\.md$/,'')};})); };
-const renderError=(root,message)=>{root.innerHTML=`<div class="content-error"><strong>Content temporarily unavailable.</strong><p>${escapeHTML(message)} Please refresh and try again.</p></div>`;};
+const escapeHTML = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[char]));
 
-const renderListPage=async type=>{const root=document.getElementById(`${type}-list`);if(!root)return;const search=document.getElementById(`${type}-search`);const filter=document.getElementById(`${type}-category`);try{let entries=await loadFolder(`content/${type}`);entries.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));const field=type==='blog'?'category':'section';const cats=[...new Set(entries.map(e=>e[field]).filter(Boolean))].sort();cats.forEach(cat=>{if(filter&&!Array.from(filter.options).some(option=>option.value===cat))filter.insertAdjacentHTML('beforeend',`<option value="${escapeHTML(cat)}">${escapeHTML(cat)}</option>`);const side=document.getElementById(`${type}-sidebar-categories`);if(side)side.insertAdjacentHTML('beforeend',`<li><a href="#" data-category="${escapeHTML(cat)}">${escapeHTML(cat)}</a></li>`)});const draw=()=>{const query=(search?.value||'').toLowerCase();const selected=filter?.value||'';const visible=entries.filter(e=>(!query||`${e.title||''} ${e.summary||''} ${e.body||''}`.toLowerCase().includes(query))&&(!selected||e[field]===selected));root.innerHTML=visible.length?visible.map((e,i)=>type==='blog'?`<article class="cms-card ${i===0?'featured':''}">${e.image?`<img class="cms-card-image" src="${escapeHTML(imageURL(e.image))}" alt="">`:'<div class="cms-card-image" aria-hidden="true"></div>'}<div class="cms-card-copy"><p class="post-meta">${escapeHTML(e.category||'Community')} <span>•</span> ${formatDate(e.date)}</p><h2>${escapeHTML(e.title||'Untitled')}</h2><p>${escapeHTML(e.summary||String(e.body||'').replace(/[#>*`]/g,'').slice(0,150))}</p><p class="byline">By ${escapeHTML(e.author||'Putrajaya Editorial Team')}</p><a class="text-link" href="blog-post.html?slug=${encodeURIComponent(e.slug)}">Read the story <span>↗</span></a></div></article>`:`<article class="wiki-entry"><div class="wiki-entry-number">${String(i+1).padStart(2,'0')}</div><div><p class="eyebrow">${escapeHTML(e.section||'Reference')}</p><h3><a href="wiki-article.html?slug=${encodeURIComponent(e.slug)}">${escapeHTML(e.title||'Untitled')}</a></h3><p>${escapeHTML(e.summary||String(e.body||'').replace(/[#>*`]/g,'').slice(0,180))}</p></div><a class="entry-arrow" href="wiki-article.html?slug=${encodeURIComponent(e.slug)}" aria-label="Read ${escapeHTML(e.title||'article')}">↗</a></article>`).join(''):'<p class="empty-state">No articles match your search.</p>';};search?.addEventListener('input',draw);filter?.addEventListener('change',draw);document.querySelectorAll('[data-category]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();if(filter)filter.value=link.dataset.category;draw()}));draw();}catch(error){renderError(root,error.message);}};
-const renderArticlePage=async type=>{const root=document.getElementById('article-root');if(!root)return;const slug=new URLSearchParams(location.search).get('slug');if(!slug){root.innerHTML='<div class="content-error"><strong>Article not found.</strong><p>Return to the directory to choose an article.</p></div>';return;}try{const entries=await loadFolder(`content/${type}`);const entry=entries.find(item=>item.slug===slug);if(!entry)throw new Error('That article could not be found.');root.innerHTML=`<article class="cms-article"><a class="back-link" href="${type}.html">← Back to ${type==='blog'?'Blog':'Wiki'}</a><p class="eyebrow">${escapeHTML(type==='blog'?entry.category||'Community':entry.section||'Reference')}</p><h1>${escapeHTML(entry.title||'Untitled')}</h1><p class="article-meta">${type==='blog'?`By ${escapeHTML(entry.author||'Putrajaya Editorial Team')} · ${formatDate(entry.date)}`:'Putrajaya of Roblox Wiki'}</p>${entry.image?`<img class="article-cover" src="${escapeHTML(imageURL(entry.image))}" alt="">`:''}<div class="article-body">${markdownToHTML(entry.body)}</div></article>`;}catch(error){renderError(root,error.message);}};
+const formatDate = (value) => {
+  if (!value) return 'Unpublished';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('en-MY', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }).format(date);
+};
 
-const injectProjectStyles=()=>{if(document.getElementById('catalog-styles'))return;const style=document.createElement('style');style.id='catalog-styles';style.textContent=`.managed-catalog{max-width:1220px;margin:0 auto}.managed-catalog .catalog-intro{max-width:680px;margin-bottom:1.75rem}.managed-catalog .catalog-intro h2{margin:.25rem 0 .7rem;font-size:clamp(2.4rem,4vw,4rem);letter-spacing:-.06em}.managed-catalog .catalog-intro p{color:var(--muted);line-height:1.7}.catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}.catalog-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}.catalog-media{display:block;width:100%;height:230px;object-fit:cover;background:var(--bg2)}.catalog-copy{padding:1.15rem 1.2rem 1.3rem}.catalog-copy h3{margin:.4rem 0 .55rem;font-size:1.5rem;letter-spacing:-.04em}.catalog-copy p{margin:0;color:var(--muted);line-height:1.7}.catalog-meta{display:flex;justify-content:space-between;gap:.7rem;flex-wrap:wrap;color:var(--muted);font-size:.78rem}.catalog-status{color:var(--green);font-weight:700}.catalog-button{display:inline-flex;margin-top:1rem;padding:.65rem 1rem;border-radius:999px;background:var(--green);color:#fff;text-decoration:none;font-weight:700}.catalog-empty{padding:1rem;border:1px dashed var(--line);color:var(--muted)}@media(max-width:700px){.catalog-grid{grid-template-columns:1fr}.catalog-media{height:200px}}`;document.head.appendChild(style)};
-const renderCatalog=async(type,anchorId,title,description)=>{const anchor=document.getElementById(anchorId);if(!anchor)return;injectProjectStyles();const section=document.createElement('section');section.className='managed-catalog section-pad reveal';section.id=`${type}-catalog`;section.innerHTML=`<div class="catalog-intro"><p class="eyebrow">Putrajaya of Roblox</p><h2>${escapeHTML(title)}</h2><p>${escapeHTML(description)}</p></div><div class="catalog-grid"><p class="catalog-empty">Loading content…</p></div>`;anchor.insertAdjacentElement('afterend',section);try{const entries=await loadFolder(`content/${type}`);entries.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));const grid=section.querySelector('.catalog-grid');grid.innerHTML=entries.length?entries.map(entry=>{const media=entry.video?`<video class="catalog-media" controls muted playsinline preload="metadata" poster="${escapeHTML(imageURL(entry.image||''))}"><source src="${escapeHTML(imageURL(entry.video))}" type="video/mp4"></video>`:entry.image?`<img class="catalog-media" src="${escapeHTML(imageURL(entry.image))}" alt="${escapeHTML(entry.title||'')}" loading="lazy">`:'<div class="catalog-media" aria-hidden="true"></div>';const button=entry.button_url?`<a class="catalog-button" href="${escapeHTML(entry.button_url)}" target="_blank" rel="noopener">${escapeHTML(entry.button_label||'Learn more')} ↗</a>`:'';return `<article class="catalog-card">${media}<div class="catalog-copy"><div class="catalog-meta"><span>${escapeHTML(entry.category||entry.status||'')}</span><span class="catalog-status">${entry.date?`Released ${formatDate(entry.date)}`:''}</span></div><h3>${escapeHTML(entry.title||'Untitled')}</h3><p>${escapeHTML(entry.description||entry.summary||'')}</p>${button}</div></article>`}).join(''):'<p class="catalog-empty">No entries have been published yet.</p>';}catch(error){section.querySelector('.catalog-grid').innerHTML=`<p class="catalog-empty">${escapeHTML(error.message)}</p>`;}initializeReveal()};
+const parseFrontmatter = (markdown) => {
+  const match = String(markdown).match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/);
+  if (!match) return { meta: {}, body: String(markdown).trim() };
 
-const renderLatestUpdates=async()=>{const section=document.getElementById('blog');const grid=section?.querySelector('.post-grid');if(!grid)return;try{const entries=(await loadFolder('content/blog')).sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).slice(0,3);grid.innerHTML=entries.length?entries.map(entry=>`<article class="post-card reveal"><div class="post-image" style="background-image:url('${escapeHTML(imageURL(entry.image||''))}')"></div><div class="post-meta">${escapeHTML(entry.category||'Community')} <span>•</span> ${formatDate(entry.date)}</div><h3>${escapeHTML(entry.title||'Untitled')}</h3><p>${escapeHTML(entry.summary||String(entry.body||'').replace(/[#>*`]/g,'').slice(0,140))}</p><a href="blog-post.html?slug=${encodeURIComponent(entry.slug)}">Read the story ↗</a></article>`).join(''):'<p class="empty-state">No updates have been published yet.</p>';initializeReveal();}catch(error){grid.innerHTML='<p class="empty-state">Updates are temporarily unavailable.</p>';}};
+  const meta = {};
+  match[1].split('\n').forEach((line) => {
+    const item = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (!item) return;
+    meta[item[1]] = item[2].trim().replace(/^['"]|['"]$/g, '');
+  });
 
-const renderStats=()=>{const values=document.querySelector('.values');if(!values||document.getElementById('site-stats'))return;const stats=[['0','Projects and experiences'],['0','RP roles to discover'],['0','Community updates']];const section=document.createElement('section');section.id='site-stats';section.className='site-stats section-pad reveal';section.innerHTML=stats.map(([value,label])=>`<div class="stat"><strong data-count="${value}">0</strong><span>${label}</span></div>`).join('');values.insertAdjacentElement('afterend',section);initializeReveal();const animate=()=>section.querySelectorAll('[data-count]').forEach(el=>{const target=Number(el.dataset.count)||0;let start=0;const step=Math.max(1,Math.ceil(target/45));const tick=()=>{start=Math.min(target,start+step);el.textContent=start.toLocaleString();if(start<target)requestAnimationFrame(tick)};tick()});new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){animate();entry.target.classList.add('counted')}}),{threshold:.4}).observe(section);};
+  return { meta, body: match[2].trim() };
+};
 
-const safeStorage={get(key){try{return localStorage.getItem(key)}catch{return null}},set(key,value){try{localStorage.setItem(key,value)}catch{}}};
-const initializeTheme=()=>{const theme=document.querySelector('.theme-toggle');const saved=safeStorage.get('putrajaya-theme');if(saved==='dark')document.body.classList.add('dark-mode');const sync=()=>{const dark=document.body.classList.contains('dark-mode');const icon=theme?.querySelector('.theme-icon');const label=theme?.querySelector('.theme-label');if(icon)icon.textContent=dark?'☀':'☾';if(label)label.textContent=dark?'Light':'Dark';theme?.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode')};theme?.addEventListener('click',()=>{document.body.classList.toggle('dark-mode');safeStorage.set('putrajaya-theme',document.body.classList.contains('dark-mode')?'dark':'light');sync()});sync();const menu=document.querySelector('.menu-toggle');const nav=document.querySelector('.nav-links');menu?.addEventListener('click',()=>{const open=nav?.classList.toggle('open');menu.setAttribute('aria-expanded',open?'true':'false')})};
-const initializeReveal=()=>{const items=[...document.querySelectorAll('.reveal:not(.is-visible)')];if(!items.length)return;if(!('IntersectionObserver'in window)){items.forEach(item=>item.classList.add('is-visible'));return}const observer=new IntersectionObserver((entries,obs)=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');obs.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'});items.forEach(item=>observer.observe(item))};
-document.addEventListener('DOMContentLoaded',()=>{initializeTheme();initializeReveal();renderListPage('blog');renderListPage('wiki');renderArticlePage(document.body.dataset.articlePage);const oldProjects=document.getElementById('projects');if(oldProjects)oldProjects.remove();renderCatalog('projects','updates','Projects','Explore the Roblox projects and experiences that make up Putrajaya of Roblox.').then(()=>renderCatalog('rp-jobs','projects-catalog','RP jobs','Find a role and contribute to life in the city.'));renderLatestUpdates();renderStats();});
+const loadMarkdownEntries = async (folder) => {
+  try {
+    const response = await fetch(`${CONTENT_API}${folder}?ref=${BRANCH}`, {
+      headers: { Accept: 'application/vnd.github+json' }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const files = await response.json();
+    const markdownFiles = files.filter((file) => file.type === 'file' && file.name.endsWith('.md'));
+
+    const entries = await Promise.all(markdownFiles.map(async (file) => {
+      const raw = await fetch(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${file.path}`, {
+        cache: 'no-store'
+      });
+
+      if (!raw.ok) return null;
+      const text = await raw.text();
+      const parsed = parseFrontmatter(text);
+
+      return {
+        ...parsed.meta,
+        body: parsed.body,
+        slug: file.name.replace(/\.md$/, '')
+      };
+    }));
+
+    return entries.filter(Boolean).sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+  } catch (error) {
+    return [];
+  }
+};
+
+const renderLatestPosts = async () => {
+  const root = document.getElementById('latest-posts');
+  if (!root) return;
+
+  const posts = await loadMarkdownEntries('content/blog');
+  const latest = posts.slice(0, 3);
+
+  if (!latest.length) {
+    root.innerHTML = '<p class="empty-state">Latest updates are temporarily unavailable.</p>';
+    return;
+  }
+
+  root.innerHTML = latest.map((post) => {
+    const image = post.image
+      ? `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${post.image.replace(/^\/+/, '')}`
+      : '';
+
+    const imageStyle = image
+      ? `background-image:url('${image}')`
+      : 'background:linear-gradient(135deg,#dfe8e0,#d8ceae)';
+
+    return `
+      <article class="post-card reveal">
+        <div class="post-image" style="${imageStyle}"></div>
+        <div class="post-meta">${escapeHTML(post.category || 'Community')} <span>•</span> ${formatDate(post.date)}</div>
+        <h3>${escapeHTML(post.title || 'Untitled')}</h3>
+        <p>${escapeHTML(post.summary || (post.body || '').replace(/[#>*`]/g, '').slice(0, 140))}</p>
+        <a href="blog-post.html?slug=${encodeURIComponent(post.slug)}">Read the story <span>↗</span></a>
+      </article>
+    `;
+  }).join('');
+};
+
+const renderCatalog = async (folder, containerId, kind) => {
+  const root = document.getElementById(containerId);
+  if (!root) return;
+
+  const entries = await loadMarkdownEntries(folder);
+
+  if (!entries.length) {
+    root.innerHTML = '<p class="empty-state">No entries published yet.</p>';
+    return;
+  }
+
+  root.innerHTML = entries.map((entry) => {
+    const image = entry.image
+      ? `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${entry.image.replace(/^\/+/, '')}`
+      : '';
+
+    const media = image
+      ? `<img class="catalog-media" src="${image}" alt="${escapeHTML(entry.title || '')}" loading="lazy">`
+      : '<div class="catalog-media placeholder"></div>';
+
+    const buttonText = entry.button_label || 'Learn more';
+    const buttonUrl = entry.button_url || '#';
+
+    return `
+      <article class="catalog-card reveal">
+        ${media}
+        <div class="catalog-copy">
+          <div class="catalog-meta">
+            <span>${escapeHTML(entry.category || kind)}</span>
+            <span>${formatDate(entry.date)}</span>
+          </div>
+          <h3>${escapeHTML(entry.title || 'Untitled')}</h3>
+          <p>${escapeHTML(entry.summary || (entry.body || '').replace(/[#>*`]/g, '').slice(0, 180))}</p>
+          <a href="${escapeHTML(buttonUrl)}" class="catalog-button" target="_blank" rel="noreferrer">${escapeHTML(buttonText)} <span>↗</span></a>
+        </div>
+      </article>
+    `;
+  }).join('');
+};
+
+const animateCounter = (target, element) => {
+  const value = Number(target);
+  let current = 0;
+  const duration = 1200;
+  const start = performance.now();
+
+  const tick = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+
+    current = Math.round(value * eased);
+    element.textContent = current.toLocaleString();
+
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      element.textContent = value.toLocaleString();
+    }
+  };
+
+  requestAnimationFrame(tick);
+};
+
+const initializeReveal = () => {
+  const items = document.querySelectorAll('.reveal');
+  if (!items.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach((item) => item.classList.add('is-visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, observerInstance) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observerInstance.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
+
+  items.forEach((item) => observer.observe(item));
+};
+
+const initializeTheme = () => {
+  const menu = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('.nav-links');
+  const theme = document.querySelector('.theme-toggle');
+
+  if (theme) {
+    const saved = localStorage.getItem('putrajaya-theme');
+    if (saved === 'dark') document.body.classList.add('dark-mode');
+
+    const syncTheme = () => {
+      const dark = document.body.classList.contains('dark-mode');
+      const icon = theme.querySelector('.theme-icon');
+      const label = theme.querySelector('.theme-label');
+
+      if (icon) icon.textContent = dark ? '☀' : '☾';
+      if (label) label.textContent = dark ? 'Light' : 'Dark';
+      theme.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    };
+
+    syncTheme();
+    theme.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('putrajaya-theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+      syncTheme();
+    });
+  }
+
+  if (menu && nav) {
+    menu.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      menu.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
+};
+
+const initializeCounters = () => {
+  const counters = document.querySelectorAll('[data-target]');
+  if (!counters.length) return;
+
+  const observer = new IntersectionObserver((entries, observerInstance) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      animateCounter(entry.target.dataset.target, entry.target);
+      observerInstance.unobserve(entry.target);
+    });
+  }, { threshold: 0.35 });
+
+  counters.forEach((counter) => observer.observe(counter));
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  initializeReveal();
+  initializeTheme();
+  initializeCounters();
+  renderLatestPosts();
+  renderCatalog('content/projects', 'projects-catalog', 'Projects');
+  renderCatalog('content/rp-jobs', 'rp-jobs-catalog', 'RP jobs');
+});
