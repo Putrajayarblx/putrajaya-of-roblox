@@ -39,38 +39,31 @@
 
     <div class="wiki-layout">
       <div class="card-stack">
-        <article class="feature-card">
-          <div class="meta"><span>Starter Guide</span><span>Updated</span></div>
-          <h3>Getting started</h3>
-          <p>Learn the basics of joining, choosing a role, understanding your responsibilities, and discovering your place in the city.</p>
-          <a href="wiki-article.html" class="text-link">Read article <span>↗</span></a>
-        </article>
-
-        <article class="article-card">
-          <div class="meta"><span>Departments</span><span>Key roles</span></div>
-          <h3>Departments and jobs</h3>
-          <p>Explore the most common public service, community, and city-building roles available inside the city.</p>
-          <a href="wiki-article.html" class="text-link">Open guide <span>↗</span></a>
-        </article>
+        <div class="cms-controls">
+          <label class="sr-only" for="wiki-search">Search wiki</label>
+          <input id="wiki-search" type="search" placeholder="Search wiki articles…" />
+          <label class="sr-only" for="wiki-category">Filter wiki section</label>
+          <select id="wiki-category" aria-label="Filter wiki sections">
+            <option value="">All sections</option>
+          </select>
+        </div>
+        <div id="wiki-list"></div>
       </div>
 
       <aside class="sidebar-stack">
         <div class="side-card">
           <h3>Contents</h3>
-          <ul class="article-list">
-            <li><a href="wiki-article.html">Getting started</a></li>
-            <li><a href="wiki-article.html">Departments</a></li>
-            <li><a href="wiki-article.html">Rules</a></li>
-            <li><a href="wiki-article.html">City directory</a></li>
+          <ul class="article-list" id="wiki-sidebar-contents">
+            <li><a href="wiki.html">All articles</a></li>
           </ul>
         </div>
 
         <div class="side-card">
           <h3>Quick links</h3>
           <ul class="article-list">
-            <li><a href="wiki-article.html">What is a Ro-State?</a></li>
-            <li><a href="wiki-article.html">How to earn trust</a></li>
-            <li><a href="wiki-article.html">How to apply for roles</a></li>
+            <li><a href="wiki-article.html?slug=getting-started">Getting started</a></li>
+            <li><a href="wiki.html">Departments</a></li>
+            <li><a href="wiki.html">Rules</a></li>
           </ul>
         </div>
       </aside>
