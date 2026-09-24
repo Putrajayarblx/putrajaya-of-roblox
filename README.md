@@ -2,74 +2,51 @@
 
 The official website for **Putrajaya of Roblox**, a Roblox Ro-State roleplay community.
 
-## Media used on the homepage
+## Content editing with Pages CMS
 
-Homepage media is stored in `assets/Putrajaya/`:
+This repository includes a Pages CMS configuration in `.pages.yml` and editable Markdown content in:
 
-- `WelcomePutrajaya.rblxBanner.png` — video poster/banner artwork
-- `IMG_5955.mp4` — homepage city video
-- `MasjidPutra.png` — Masjid Putra imagery
-- `MilleniumMonumentSunsetLandscape.png` — sunset landmark imagery
-- `MinistryofFinanceComplex.png` — civic architecture
-- `PICC.png` and `PICCSunsetLandscape.png` — convention centre imagery
-- `PalaceOfJustice.png` — civic landmark imagery
-- `PerbadananSunset2Lanscape.png` — sunset city imagery
-- `PerdanaPutraSunsetLandscape.png` — Perdana Putra imagery
-- `PixelStretch3.png` — Putrajaya landmark artwork
+- `content/blog/` — blog posts
+- `content/wiki/` — Wiki articles
+- `assets/uploads/` — media uploaded through the CMS
 
-The homepage also uses `assets/putrajaya-collage.png` as the large hero image and a wide collage banner.
+To use Pages CMS:
 
-## How to edit the current site
+1. Sign in to Pages CMS with the GitHub account that has access to this repository.
+2. Select `Putrajayarblx/putrajaya-of-roblox` and the `main` branch.
+3. Choose **Blog posts** or **Wiki articles**.
+4. Create or edit an entry, upload media if needed, and commit the change.
+5. Wait for GitHub Pages to rebuild the site.
 
-This is currently a static HTML site. The simplest workflow is:
+The Markdown front matter fields are:
 
-1. Open the repository on GitHub.
-2. Open `blog.html`, `blog-post.html`, `wiki.html`, or `wiki-article.html`.
-3. Click the pencil/edit button.
-4. Edit the text, links, or image paths.
-5. Commit the change to `main`.
-6. Wait for GitHub Pages to rebuild.
+```yaml
+---
+title: Example title
+date: 2026-09-24T00:00:00.000Z
+category: Community news
+summary: Short description for cards and previews.
+image: /putrajaya-of-roblox/assets/uploads/example.png
+---
 
-### Add a blog post manually
-
-For a new post, duplicate `blog-post.html`, rename it—for example `blog-city-update.html`—then edit:
-
-- `<title>`
-- the article eyebrow/category
-- the main heading
-- the article paragraphs
-- any image or video
-
-Then add a link to the new file from `blog.html` and from the homepage’s update cards if desired.
-
-### Edit the Wiki manually
-
-- Edit `wiki.html` to change the Wiki index and category links.
-- Edit `wiki-article.html` to change the article content.
-- For a new article, duplicate `wiki-article.html`, rename it, edit the content, and link it from `wiki.html`.
-
-### Add an image or video
-
-Upload media into `assets/` or `assets/Putrajaya/`, then reference it like this:
-
-```html
-<img src="assets/Putrajaya/MasjidPutra.png" alt="Masjid Putra in Putrajaya">
-<video controls poster="assets/Putrajaya/WelcomePutrajaya.rblxBanner.png">
-  <source src="assets/Putrajaya/IMG_5955.mp4" type="video/mp4">
-</video>
+Article content goes here.
 ```
 
-## Easier editing without changing code
+### Important publishing limitation
 
-The best next step is to add a Git-based CMS such as **Decap CMS**. It provides a browser editor for blog posts and Wiki articles while saving the content back to GitHub. It still needs a one-time setup for GitHub authentication and CMS configuration, but after that you can create and edit posts through an `/admin/` dashboard instead of editing HTML.
+Pages CMS edits Markdown files in GitHub. The current static HTML pages do not automatically turn every new Markdown file into a new rendered blog or Wiki page. The existing HTML pages remain the live templates until a static-site build step is added.
 
-Other options:
+For the current site, use the CMS to manage the content files, then either connect them to a generator or copy the approved Markdown content into the corresponding HTML template. A future build step can automatically generate `blog.html`, `blog-post.html`, `wiki.html`, and Wiki article pages from these files.
 
-- **Pages CMS**: simpler GitHub-based browser editor for Markdown files.
-- **Airtable/Notion + API**: easier content entry, but requires a small data integration and is less reliable for a simple GitHub Pages site.
-- **WordPress/Ghost**: full publishing experience, but requires hosting outside this static GitHub Pages repository.
+## Media and video
 
-For this project, Decap CMS or Pages CMS is the most practical route. The current static setup does not yet include a CMS dashboard.
+Putrajaya media is stored in `assets/Putrajaya/`. The homepage uses the collage banner and the city video. New uploaded CMS media goes into `assets/uploads/`.
+
+The video is deliberately displayed without a border. Its rounded edge and dark background are part of the presentation, while `border: 0` and `outline: 0` remove the thick frame.
+
+## Run locally
+
+Open `index.html` in a browser, or serve the folder with any static web server.
 
 ## GitHub Pages
 
