@@ -1,0 +1,53 @@
+media:
+  input: assets/uploads
+  output: /putrajaya-of-roblox/assets/uploads
+
+content:
+  - name: blog
+    label: Blog posts
+    type: collection
+    path: content/blog
+    filename: "{year}-{month}-{day}-{slug}.md"
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: category
+        label: Category
+        type: string
+        required: true
+      - name: summary
+        label: Summary
+        type: text
+      - name: image
+        label: Cover image
+        type: image
+      - name: body
+        label: Body
+        type: rich-text
+
+  - name: wiki
+    label: Wiki articles
+    type: collection
+    path: content/wiki
+    filename: "{slug}.md"
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: section
+        label: Section
+        type: string
+        required: true
+      - name: summary
+        label: Summary
+        type: text
+      - name: body
+        label: Body
+        type: rich-text
