@@ -1,7 +1,8 @@
 ---
 title: Welcome to Putrajaya of Roblox
 date: 2024-09-12T00:00:00.000Z
-category: Community news
+author: Putrajaya of Roblox
+category: Community News
 summary: An update from the Putrajaya of Roblox community.
 image: /putrajaya-of-roblox/assets/putrajaya-collage.png
 ---
