@@ -1,1 +1,27 @@
 .landmark{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(2rem,5vw,5rem);align-items:center}.landmark-image{height:360px;overflow:hidden;border-radius:12px;background:#d8e8e3}.landmark-image img{width:100%;height:100%;object-fit:cover;object-position:center}.muted{color:var(--muted);max-width:420px}.qr-code{width:110px;height:110px;object-fit:contain;margin-top:1.5rem;background:#fff;padding:6px;border-radius:8px}.link-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:1.5rem}.link-grid a{padding:.8rem 1rem;border:1px solid var(--line);border-radius:8px;font-size:.8rem;font-weight:700;background:var(--surface);transition:transform .2s,border-color .2s}.link-grid a:hover{transform:translateY(-3px);border-color:var(--green)}.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}.reveal.is-visible{opacity:1;transform:none}.reveal-delay{transition-delay:.12s}.reveal-delay-2{transition-delay:.24s}.hero-visual{width:100%;height:clamp(480px,52vw,720px);border-radius:18px;overflow:hidden;background:#173d5c}.hero-visual img{width:100%;height:100%;object-fit:cover;object-position:center}.hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.5));pointer-events:none}.hero-visual .visual-caption{z-index:1}.post-image.image-one{background-image:url('assets/putrajaya-collage.png');background-size:cover;background-position:center}.post-image.image-two{background-image:url('assets/putra-bridge.png');background-size:cover;background-position:center}.post-image.image-three{background-image:url('assets/putrajaya-collage.png');background-size:cover;background-position:70% center}@media(max-width:900px){.landmark{grid-template-columns:1fr}.landmark-image{height:280px}.hero-visual{height:clamp(360px,80vw,560px)}}@media(max-width:600px){.link-grid{grid-template-columns:1fr}.qr-code{width:96px;height:96px}}@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+.media-feature {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.city-video {
+  display: block;
+  width: 100%;
+  max-height: 620px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 0;
+  outline: 0;
+  border-radius: 16px;
+  background: #101719;
+  box-shadow: 0 18px 40px rgba(10, 35, 37, .12);
+}
+
+@media (max-width: 900px) {
+  .media-feature {
+    grid-template-columns: 1fr;
+  }
+}
