@@ -13,102 +13,24 @@ content:
         label: Title
         type: string
         required: true
-
       - name: date
         label: Publish date
         type: date
         required: true
-
       - name: author
         label: Author
         type: string
         required: true
-
       - name: category
         label: Category
         type: string
         required: true
-
       - name: summary
         label: Summary
         type: text
-
       - name: image
         label: Cover image
         type: image
-
-      - name: body
-        label: Body
-        type: rich-text
-
-  - name: projects
-    label: Projects
-    type: collection
-    path: content/projects
-    filename: "{slug}.md"
-    fields:
-      - name: title
-        label: Title
-        type: string
-        required: true
-
-      - name: date
-        label: Release date
-        type: date
-        required: true
-
-      - name: image
-        label: Cover image
-        type: image
-
-      - name: summary
-        label: Summary
-        type: text
-
-      - name: button_label
-        label: Button label
-        type: string
-
-      - name: button_url
-        label: Button link
-        type: string
-
-      - name: body
-        label: Body
-        type: rich-text
-
-  - name: rp-jobs
-    label: RP jobs
-    type: collection
-    path: content/rp-jobs
-    filename: "{slug}.md"
-    fields:
-      - name: title
-        label: Job title
-        type: string
-        required: true
-
-      - name: date
-        label: Release date
-        type: date
-        required: true
-
-      - name: image
-        label: Cover image
-        type: image
-
-      - name: summary
-        label: Summary
-        type: text
-
-      - name: button_label
-        label: Button label
-        type: string
-
-      - name: button_url
-        label: Button link
-        type: string
-
       - name: body
         label: Body
         type: rich-text
@@ -123,16 +45,13 @@ content:
         label: Title
         type: string
         required: true
-
       - name: section
         label: Section
         type: string
         required: true
-
       - name: summary
         label: Summary
         type: text
-
       - name: body
         label: Body
         type: rich-text
