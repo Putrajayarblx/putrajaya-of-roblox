@@ -1,15 +1,84 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="A practical, community-maintained reference library for Putrajaya of Roblox." />
   <title>Wiki | Putrajaya of Roblox</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="enhancements.css" />
 </head>
 <body>
-  <header class="site-header" id="top"><a class="brand" href="index.html" aria-label="Putrajaya of Roblox home"><img src="assets/putrajaya-logo.png" alt="Putrajaya logo" /><span><strong>Putrajaya</strong><small>of Roblox</small></span></a><button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button><nav class="nav-links" aria-label="Main navigation"><a href="index.html#about">About</a><a href="index.html#experiences">Explore</a><a href="blog.html">Blog</a><a href="wiki.html" aria-current="page">Wiki</a><button class="theme-toggle" type="button" aria-label="Switch to dark mode"><span class="theme-icon">☾</span><span class="theme-label">Dark</span></button><a class="nav-cta" href="index.html#join">Join the city <span>↗</span></a></nav></header>
-  <main class="page-shell wiki-page"><header class="page-header wiki-hero"><p class="eyebrow">Putrajaya of Roblox Wiki</p><h1>The city<br /><strong>reference desk.</strong></h1><p class="page-intro">A practical, community-maintained handbook for citizens, departments, rules, roles, and systems.</p></header><div class="wiki-toolbar cms-controls"><label class="sr-only" for="wiki-search">Search wiki</label><input id="wiki-search" type="search" placeholder="Search the Wiki…" /><label class="sr-only" for="wiki-category">Filter section</label><select id="wiki-category" aria-label="Filter Wiki section"><option value="">All sections</option></select></div><div class="wiki-layout"><section><div class="wiki-section-heading"><p class="eyebrow">Knowledge base</p><h2>Browse articles</h2></div><div id="wiki-list" class="wiki-directory"></div></section><aside class="sidebar-stack"><div class="side-card"><h3>Wiki sections</h3><ul class="article-list" id="wiki-sidebar-categories"><li><a href="wiki.html">All articles</a></li></ul></div><div class="side-card wiki-help"><h3>How to use this Wiki</h3><p>Start with Getting Started, then explore departments, rules, and city systems. Every article is maintained as Markdown through Pages CMS.</p></div></aside></div></main>
-  <footer class="site-footer"><div class="footer-top"><a class="brand brand-light" href="index.html"><img src="assets/putrajaya-logo.png" alt="Putrajaya logo" /><span><strong>Putrajaya</strong><small>of Roblox</small></span></a><p>Creating stories. Building community.<br />One city at a time.</p><a class="back-top" href="#top">Back to top ↑</a></div><div class="footer-bottom"><span>© 2024 Putrajaya of Roblox</span><span>Made for the Ro-State community</span><span><a href="blog.html">Blog</a> &nbsp; <a href="wiki.html">Wiki</a></span></div></footer><script src="script.js"></script>
+  <header class="site-header" id="top">
+    <a class="brand" href="index.html" aria-label="Putrajaya of Roblox home"><img src="assets/putrajaya-logo.png" alt="Putrajaya logo" /><span><strong>Putrajaya</strong><small>of Roblox</small></span></a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html#about">About</a>
+      <a href="index.html#experiences">Explore</a>
+      <a href="blog.html">Blog</a>
+      <a href="wiki.html" aria-current="page">Wiki</a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode"><span class="theme-icon">☾</span><span class="theme-label">Dark</span></button>
+      <a class="nav-cta" href="index.html#join">Join the city <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main class="page-shell wiki-page">
+    <header class="page-header wiki-hero">
+      <p class="eyebrow">Putrajaya of Roblox Wiki</p>
+      <h1>The city<br /><strong>reference desk.</strong></h1>
+      <p class="page-intro">A practical, community-maintained handbook for citizens, departments, rules, roles, and systems.</p>
+    </header>
+
+    <div class="wiki-toolbar cms-controls">
+      <label class="sr-only" for="wiki-search">Search wiki</label>
+      <input id="wiki-search" type="search" placeholder="Search the Wiki…" />
+      <label class="sr-only" for="wiki-category">Filter section</label>
+      <select id="wiki-category" aria-label="Filter Wiki section">
+        <option value="">All sections</option>
+      </select>
+    </div>
+
+    <div class="wiki-layout">
+      <section>
+        <div class="wiki-section-heading">
+          <p class="eyebrow">Knowledge base</p>
+          <h2>Browse articles</h2>
+        </div>
+        <div id="wiki-list" class="wiki-directory"></div>
+      </section>
+
+      <aside class="sidebar-stack">
+        <div class="side-card">
+          <h3>Wiki sections</h3>
+          <ul class="article-list" id="wiki-sidebar-categories">
+            <li><a href="wiki.html">All articles</a></li>
+          </ul>
+        </div>
+
+        <div class="side-card wiki-help">
+          <h3>How to use this Wiki</h3>
+          <p>Start with Getting Started, then explore departments, rules, and city systems. Every article is maintained as Markdown through Pages CMS.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <a class="brand brand-light" href="index.html"><img src="assets/putrajaya-logo.png" alt="Putrajaya logo" /><span><strong>Putrajaya</strong><small>of Roblox</small></span></a>
+      <p>Creating stories. Building community.<br />One city at a time.</p>
+      <a class="back-top" href="#top">Back to top ↑</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Putrajaya of Roblox</span>
+      <span>Made for the Ro-State community</span>
+      <span><a href="blog.html">Blog</a> &nbsp; <a href="wiki.html">Wiki</a></span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
