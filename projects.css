@@ -1,0 +1,12 @@
+/* Homepage-only Projects and RP jobs cards. */
+.managed-sections{width:min(1120px,calc(100% - 2rem));margin:0 auto;padding-top:clamp(3rem,6vw,5rem);padding-bottom:clamp(3rem,6vw,5rem)}
+.managed-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}
+.managed-card{overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.managed-card-media{width:100%;height:230px;display:block;object-fit:cover;background:var(--surface2)}
+.managed-card-copy{padding:1.25rem}
+.managed-card-meta{display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap;color:var(--muted);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.managed-card h3{margin:.75rem 0 .55rem;font-size:clamp(1.5rem,2.5vw,2.3rem);line-height:1.02}
+.managed-card p{margin:0 0 1rem;color:var(--muted);line-height:1.65}
+.managed-card-button{display:inline-flex;align-items:center;gap:.45rem;padding:.65rem .9rem;border-radius:999px;background:var(--ink);color:var(--bg);font-size:.78rem;font-weight:700;text-decoration:none}
+.managed-empty{padding:1rem 1.1rem;border:1px dashed var(--line);border-radius:10px;color:var(--muted);grid-column:1/-1}
+@media(max-width:700px){.managed-catalog{grid-template-columns:1fr}.managed-card-media{height:210px}}
