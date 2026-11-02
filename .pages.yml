@@ -35,27 +35,6 @@ content:
         label: Body
         type: rich-text
 
-  - name: wiki
-    label: Wiki articles
-    type: collection
-    path: content/wiki
-    filename: "{slug}.md"
-    fields:
-      - name: title
-        label: Title
-        type: string
-        required: true
-      - name: section
-        label: Section
-        type: string
-        required: true
-      - name: summary
-        label: Summary
-        type: text
-      - name: body
-        label: Body
-        type: rich-text
-
   - name: projects
     label: Projects
     type: collection
