@@ -10,7 +10,7 @@
   <script>
     (function () {
       var slug = new URLSearchParams(location.search).get('slug');
-      location.replace(slug ? 'https://putrajayarblx-wiki.vercel.app/wiki-article.html?slug=' + encodeURIComponent(slug) : 'https://putrajayarblx-wiki.vercel.app/');
+      location.replace(slug ? 'https://putrajayarblx-wiki.vercel.app/' + encodeURIComponent(slug) + '/' : 'https://putrajayarblx-wiki.vercel.app/');
     })();
   </script>
 </head>
